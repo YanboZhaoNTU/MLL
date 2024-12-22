@@ -1,0 +1,25 @@
+import numpy as np
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
+
+BR_cfl_train = []
+BR_cfl_test = []
+OL_num = 5
+def BRC_train(X,Y):
+    for i in range(Y.shape[1]):
+        cfl = LogisticRegression()
+        cfl.fit(X,Y[:,i])
+        BR_cfl_train.append(cfl)
+
+def BRC_test(X):
+    for clf in BR_cfl_train:
+        BR_cfl_test.append(clf.predict(X))
+    return np.array(BR_cfl_test).T
+
+X = np.random.randn(100, 5)  # 100 samples, 5 features
+Y = np.random.randint(0, 2, (100, 3))  # 3 binary labels
+
+# Split into train and test sets
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2, random_state=42)
+BRC = BRC_train(X_train, Y_train)
+pre = BRC_test(X_test)
